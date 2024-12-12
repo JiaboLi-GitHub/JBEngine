@@ -2,14 +2,9 @@
 #include <chrono>
 #include "../../engine/render/render.h"
 #include "../../engine/objects/mesh.h"
-#include "../../engine/camera/perspectiveCamera.h"
 #include "../../engine/geometries/boxGeometry.h"
+#include "../../engine/camera/perspectiveCamera.h"
 #include "../../engine/cameraControl/fpsCameraControl.h"
-#include "../../engine/material/phongLightingMaterial.h"
-#include "../../engine/texture/texture2D.h"
-#include "../../engine/lights/directionalLight.h"
-#include "../../engine/material/depthMaterial.h"
-#include "../../engine/camera/orthographicCamera.h"
 
 using namespace JB;
 
@@ -19,16 +14,15 @@ constexpr uint32_t HEIGHT = 400;
 constexpr int RowMeshSize = 3;
 constexpr int ColumnMeshSize = 3;
 
+Scene::Ptr scene = nullptr;
 FPSCameraControl::Ptr fpsCameraControl = nullptr;
 PerspectiveCamera::Ptr camera = nullptr;
 
-//地板
-Scene::Ptr scene = nullptr;
-
-DirectionalLight::Ptr dirLight = nullptr;
-
 void initScene();
 
+void initCamera();
+
+void release();
 
 static void onFrameSizeCallback(int width, int height)
 {
@@ -51,72 +45,11 @@ static void onKeyboardAction(KeyBoardState action)
 	fpsCameraControl->onKeyboard(action);
 }
 
-void rotateCube()
-{
-
-}
-
 int main()
 {
 	initScene();
 
-	std::vector<float> positions = {
-		-1.0f,  1.0f, 0.0f,  // 左上角
-		-1.0f, -1.0f, 0.0f,  // 左下角
-		 1.0f, -1.0f, 0.0f,  // 右下角
-		 1.0f,  1.0f, 0.0f   // 右上角
-	};
-
-	std::vector<float> colors = {
-		1.0f, 0.0f, 0.0f,  // 红色 (左上角)
-		0.0f, 1.0f, 0.0f,  // 绿色 (左下角)
-		0.0f, 0.0f, 1.0f,  // 蓝色 (右下角)
-		1.0f, 1.0f, 0.0f   // 黄色 (右上角)
-	};
-
-	std::vector<float> uvCoordinates = {
-	0.0f, 1.0f,  // 左上角
-	0.0f, 0.0f,  // 左下角
-	1.0f, 0.0f,  // 右下角
-	1.0f, 1.0f   // 右上角
-	};
-
-	std::vector<uint32_t> indices = {
-		0, 1, 2,  // 第一个三角形
-		0, 2, 3   // 第二个三角形
-	};
-
-	auto geometry = std::make_shared<Geometry>();
-	geometry->setAttribute(AttributeType::Position, std::make_shared<AttributeF>(positions, 3));
-	geometry->setAttribute(AttributeType::Color, std::make_shared<AttributeF>(colors, 3));
-	geometry->setAttribute(AttributeType::UV, std::make_shared<AttributeF>(uvCoordinates, 2));
-	geometry->setIndex(std::make_shared<AttributeUInt32>(indices, 1));
-
-	auto material = std::make_shared<BaseMaterial>();
-
-	auto mesh = Mesh::create(geometry, material);
-	mesh->setPosition(0, 0, -3);
-	//scene->addChild(mesh);
-
-	dirLight = std::make_shared<DirectionalLight>();
-	dirLight->setAmbient(glm::vec3(0.2f, 0.2f, 0.2f));
-	dirLight->setDiffuse(glm::vec3(0.3f, 0.3f, 0.3f));
-	dirLight->setSpecular(glm::vec3(0.2f, 0.2f, 0.2f));
-	dirLight->setPosition(-8, -8, -8);
-	//dirLight->setCastShadow(false);
-	scene->addChild(dirLight);
-
-	auto dirLight1 = std::make_shared<DirectionalLight>();
-	dirLight1->setAmbient(glm::vec3(0.2f, 0.2f, 0.2f));
-	dirLight1->setDiffuse(glm::vec3(0.3f, 0.3f, 0.3f));
-	dirLight1->setSpecular(glm::vec3(0.2f, 0.2f, 0.2f));
-	dirLight1->setPosition(8, -8, -8);
-	//dirLight->setCastShadow(false);
-	//scene->addChild(dirLight1);
-
-	camera = PerspectiveCamera::create(glm::radians(45.0f), (float)WIDTH / (float)(HEIGHT), 0.1f, 100.0f);
-
-	fpsCameraControl = std::make_shared<FPSCameraControl>(camera);
+	initCamera();
 
 	Renderer::Descriptor rDc;
 	rDc.width = WIDTH;
@@ -143,8 +76,6 @@ int main()
 
 		fpsCameraControl->update();
 
-		rotateCube();
-
 		frameCount++;
 
 		auto currentTime = std::chrono::high_resolution_clock::now();
@@ -159,10 +90,7 @@ int main()
 		}
 	}
 
-	camera = nullptr;
-	fpsCameraControl = nullptr;
-	scene = nullptr;
-	dirLight = nullptr;
+	release();
 	return 0;
 }
 
@@ -195,39 +123,68 @@ void initScene()
 		25.0f, 25.0f
 	};
 
+	//地板
 	auto planeGeometry = std::make_shared<Geometry>();
 	planeGeometry->setAttribute(AttributeType::Position, std::make_shared<AttributeF>(positions, 3));
 	planeGeometry->setAttribute(AttributeType::Normal, std::make_shared<AttributeF>(normals, 3));
 	planeGeometry->setAttribute(AttributeType::UV, std::make_shared<AttributeF>(texCoords, 2));
-	auto planeTexture2D = std::make_shared<Texture2D>(std::string("E:/SoftWare_ProgRam/JBEngine/resources/wood.png"));
+
+	auto planeTexture2D = std::make_shared<Texture2D>(std::string("resources/wood.png"));
 	planeTexture2D->setTextureFilterMin(TextureFilter::LinearMipmapLinear);
+
 	auto planeMaterial = std::make_shared<PhongLightingMaterial>();
 	planeMaterial->setDiffuse(planeTexture2D);
 	planeMaterial->setSpecular(planeTexture2D);
+
 	auto plane = Mesh::create(planeGeometry, planeMaterial);
 
+	//箱子
 	auto boxGeometry = std::make_shared<BoxGeometry>(1.0f, 1.0f, 1.0f);
-	auto boxTexture2D = std::make_shared<Texture2D>(std::string("E:/SoftWare_ProgRam/JBEngine/resources/wood.png"));
+
+	auto boxTexture2D = std::make_shared<Texture2D>(std::string("resources/wood.png"));
+	boxTexture2D->setTextureFilterMin(TextureFilter::LinearMipmapLinear);
+
 	auto boxMaterial = std::make_shared<PhongLightingMaterial>();
 	boxMaterial->setDiffuse(boxTexture2D);
 	boxMaterial->setSpecular(boxTexture2D);
 
 	auto mesh1 = Mesh::create(boxGeometry, boxMaterial);
-	mesh1->setPosition(0, 0, -10);
+	mesh1->setPosition(-1, 0, -8);
 
 	auto mesh2 = Mesh::create(boxGeometry, boxMaterial);
-	mesh2->setPosition(-4, 0, -15);
+	mesh2->setPosition(-3, 0, -6);
+	mesh2->rotateAroundAxis(glm::vec3(0.0, 1.0, 0.0), 60);
 
 	auto mesh3 = Mesh::create(boxGeometry, boxMaterial);
-	mesh3->setPosition(4, 0.5, -10);
+	mesh3->setPosition(1, 0.5, -6);
+	mesh3->rotateAroundAxis(glm::vec3(1.0, 1.0, 1.0), 60);
 
-	auto mesh4 = Mesh::create(boxGeometry, boxMaterial);
-	mesh4->setPosition(2, 0.5, -5);
+	//灯光
+	auto dirLight = std::make_shared<DirectionalLight>();
+	dirLight->setAmbient(glm::vec3(0.3f, 0.3f, 0.3f));
+	dirLight->setDiffuse(glm::vec3(0.4f, 0.4f, 0.4f));
+	dirLight->setSpecular(glm::vec3(0.3f, 0.3f, 0.3f));
+	dirLight->setPosition(-8, -8, -8);
 
 	scene = Scene::create();
 	scene->addChild(plane);
 	scene->addChild(mesh1);
 	scene->addChild(mesh2);
 	scene->addChild(mesh3);
-	scene->addChild(mesh4);
+	scene->addChild(dirLight);
+}
+
+void initCamera()
+{
+	camera = PerspectiveCamera::create(glm::radians(45.0f), (float)WIDTH / (float)(HEIGHT), 0.1f, 100.0f);
+	camera->setPosition(-1, 0, -1);
+
+	fpsCameraControl = std::make_shared<FPSCameraControl>(camera);
+}
+
+void release()
+{
+	camera = nullptr;
+	fpsCameraControl = nullptr;
+	scene = nullptr;
 }
