@@ -3,8 +3,8 @@
 
 namespace JB
 {
-    std::string MeshBasicMaterialVSCode = 
-    R"(
+	std::string MeshBasicMaterialVSCode =
+		R"(
 
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aColor;
@@ -24,9 +24,9 @@ void main()
     TexCoord = aTexCoord;
 }
     )";
-    
-    std::string MeshBasicMaterialFSCode = 
-    R"(
+
+	std::string MeshBasicMaterialFSCode =
+		R"(
 
 out vec4 FragColor;
 
@@ -44,9 +44,9 @@ void main()
 #endif
 }
     )";
-    
-    std::string CubeMaterialVSCode = 
-    R"(
+
+	std::string CubeMaterialVSCode =
+		R"(
 #version 330 core
 
 layout(location = 0) in vec3 aPos;
@@ -65,9 +65,9 @@ void main()
     gl_Position = pos.xyww;
 }
     )";
-    
-    std::string CubeMaterialFSCode = 
-    R"(
+
+	std::string CubeMaterialFSCode =
+		R"(
 #version 330 core
 
 out vec4 FragColor;
@@ -82,8 +82,8 @@ void main()
 }
     )";
 
-    std::string PhongLightingMaterialVSCode = 
-    R"(
+	std::string PhongLightingMaterialVSCode =
+		R"(
 #version 330 core
 
 layout(location = 0) in vec3 aPos;
@@ -107,9 +107,9 @@ void main()
     gl_Position = projection * view * vec4(FragPos, 1.0);
 }
     )";
-    
-    std::string PhongLightingMaterialFSCode = 
-    R"(
+
+	std::string PhongLightingMaterialFSCode =
+		R"(
 #version 330 core
 
 out vec4 FragColor;
@@ -184,7 +184,18 @@ float shadowCalculation(sampler2D shadowMap, vec4 fragPosLightSpace, vec3 normal
     float currentDepth = projCoords.z;
 
     float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
-    float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+    for (int x = -1; x <= 1; ++x)
+    {
+        for (int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+            shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
+        }
+    }
+    shadow /= 9.0;
 
     if (projCoords.z > 1.0)
         shadow = 0.0;
@@ -192,9 +203,9 @@ float shadowCalculation(sampler2D shadowMap, vec4 fragPosLightSpace, vec3 normal
     return shadow;
 }
     )";
-    
-    std::string DepthMaterialVSCode = 
-    R"(
+
+	std::string DepthMaterialVSCode =
+		R"(
 #version 330 core
 layout(location = 0) in vec3 aPos;
 
@@ -207,9 +218,9 @@ void main()
     gl_Position = projection * view * model * vec4(aPos, 1.0f);
 }
     )";
-    
-    std::string DepthMaterialFSCode = 
-    R"(
+
+	std::string DepthMaterialFSCode =
+		R"(
 #version 330 core
 out vec4 FragColor;
 
