@@ -42,7 +42,7 @@ namespace JB
 	};
 	extern uint32_t toGL(const BufferAllocType& value);
 
-	enum class BufferType 
+	enum class BufferType
 	{
 		ArrayBuffer,
 		IndexBuffer
@@ -92,7 +92,8 @@ namespace JB
 		OrthographicCamera,
 		PerspectiveCamera,
 		Mesh,
-		Lights
+		Lights,
+		Group
 	};
 
 	enum class TextureType : uint8_t
@@ -147,7 +148,7 @@ namespace JB
 	};
 	extern uint32_t toGL(TextureCubeTarget target);
 
-	enum class TextureWrapping 
+	enum class TextureWrapping
 	{
 		RepeatWrapping,
 		ClampToEdgeWrapping,
@@ -156,7 +157,7 @@ namespace JB
 	};
 	extern uint32_t toGL(const TextureWrapping& value);
 
-	enum class TextureFilter 
+	enum class TextureFilter
 	{
 		LinearFilter,                  // GL_LINEAR
 		NearestFilter,                 // GL_NEAREST

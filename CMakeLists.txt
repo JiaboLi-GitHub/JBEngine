@@ -12,6 +12,7 @@ SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/include
 
 link_directories(
 	SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/libs/glfw
+	SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/libs/assimp
 )
 
 add_subdirectory(engine)
@@ -21,9 +22,11 @@ add_executable(box "examples/box/box.cpp")
 add_executable(framebuffers "examples/framebuffers/framebuffers.cpp")
 add_executable(light "examples/light/light.cpp")
 add_executable(shadow "examples/shadow/shadow.cpp")
+add_executable(model "examples/model/model.cpp")
 
-target_link_libraries(triangle JBEngine_lib  glfw3.lib)
-target_link_libraries(box JBEngine_lib  glfw3.lib)
-target_link_libraries(framebuffers JBEngine_lib  glfw3.lib)
-target_link_libraries(light JBEngine_lib  glfw3.lib)
-target_link_libraries(shadow JBEngine_lib  glfw3.lib)
+target_link_libraries(triangle JBEngine_lib  glfw3.lib assimp-vc143-mtd.lib)
+target_link_libraries(box JBEngine_lib  glfw3.lib assimp-vc143-mtd.lib)
+target_link_libraries(framebuffers JBEngine_lib  glfw3.lib assimp-vc143-mtd.lib)
+target_link_libraries(light JBEngine_lib  glfw3.lib assimp-vc143-mtd.lib)
+target_link_libraries(shadow JBEngine_lib  glfw3.lib assimp-vc143-mtd.lib)
+target_link_libraries(model JBEngine_lib  glfw3.lib assimp-vc143-mtd.lib)

@@ -3,8 +3,8 @@
 
 namespace JB
 {
-	std::string MeshBasicMaterialVSCode =
-		R"(
+    std::string MeshBasicMaterialVSCode = 
+    R"(
 
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aColor;
@@ -23,10 +23,11 @@ void main()
     ourColor = aColor;
     TexCoord = aTexCoord;
 }
-    )";
 
-	std::string MeshBasicMaterialFSCode =
-		R"(
+    )";
+    
+    std::string MeshBasicMaterialFSCode = 
+    R"(
 
 out vec4 FragColor;
 
@@ -43,10 +44,11 @@ void main()
 	FragColor = vec4(ourColor, 1.0f);
 #endif
 }
-    )";
 
-	std::string CubeMaterialVSCode =
-		R"(
+    )";
+    
+    std::string CubeMaterialVSCode = 
+    R"(
 #version 330 core
 
 layout(location = 0) in vec3 aPos;
@@ -64,10 +66,11 @@ void main()
     vec4 pos = projection * view * model * vec4(aPos, 1.0);
     gl_Position = pos.xyww;
 }
-    )";
 
-	std::string CubeMaterialFSCode =
-		R"(
+    )";
+    
+    std::string CubeMaterialFSCode = 
+    R"(
 #version 330 core
 
 out vec4 FragColor;
@@ -80,10 +83,11 @@ void main()
 {
     FragColor = texture(skybox, TexCoords);
 }
+
     )";
 
-	std::string PhongLightingMaterialVSCode =
-		R"(
+    std::string PhongLightingMaterialVSCode = 
+    R"(
 #version 330 core
 
 layout(location = 0) in vec3 aPos;
@@ -106,10 +110,11 @@ void main()
 
     gl_Position = projection * view * vec4(FragPos, 1.0);
 }
-    )";
 
-	std::string PhongLightingMaterialFSCode =
-		R"(
+    )";
+    
+    std::string PhongLightingMaterialFSCode = 
+    R"(
 #version 330 core
 
 out vec4 FragColor;
@@ -203,9 +208,9 @@ float shadowCalculation(sampler2D shadowMap, vec4 fragPosLightSpace, vec3 normal
     return shadow;
 }
     )";
-
-	std::string DepthMaterialVSCode =
-		R"(
+    
+    std::string DepthMaterialVSCode = 
+    R"(
 #version 330 core
 layout(location = 0) in vec3 aPos;
 
@@ -217,10 +222,11 @@ void main()
 {
     gl_Position = projection * view * model * vec4(aPos, 1.0f);
 }
-    )";
 
-	std::string DepthMaterialFSCode =
-		R"(
+    )";
+    
+    std::string DepthMaterialFSCode = 
+    R"(
 #version 330 core
 out vec4 FragColor;
 
@@ -239,5 +245,6 @@ void main()
 {
     FragColor = vec4(vec3(gl_FragCoord.z), 1.0);
 }
+
     )";
 }
