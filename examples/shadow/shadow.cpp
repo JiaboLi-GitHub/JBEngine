@@ -8,8 +8,8 @@
 
 using namespace JB;
 
-constexpr uint32_t WIDTH = 600;
-constexpr uint32_t HEIGHT = 400;
+uint32_t WIDTH = 1280;
+uint32_t HEIGHT = 720;
 
 constexpr int RowMeshSize = 3;
 constexpr int ColumnMeshSize = 3;
@@ -128,22 +128,22 @@ void initScene()
 	planeGeometry->setAttribute(AttributeType::Position, std::make_shared<AttributeF>(positions, 3));
 	planeGeometry->setAttribute(AttributeType::Normal, std::make_shared<AttributeF>(normals, 3));
 	planeGeometry->setAttribute(AttributeType::UV, std::make_shared<AttributeF>(texCoords, 2));
-
-	auto planeTexture2D = std::make_shared<Texture2D>(std::string("resources/wood.png"));
+	
+	auto planeTexture2D = std::make_shared<Texture2D>(std::string("E:/GitHub/JBEngine/resources/wood.png"));
 	planeTexture2D->setTextureFilterMin(TextureFilter::LinearMipmapLinear);
-
+	
 	auto planeMaterial = std::make_shared<PhongLightingMaterial>();
 	planeMaterial->setDiffuse(planeTexture2D);
 	planeMaterial->setSpecular(planeTexture2D);
-
+	
 	auto plane = Mesh::create(planeGeometry, planeMaterial);
 
 	//箱子
 	auto boxGeometry = std::make_shared<BoxGeometry>(1.0f, 1.0f, 1.0f);
-
-	auto boxTexture2D = std::make_shared<Texture2D>(std::string("resources/wood.png"));
+	
+	auto boxTexture2D = std::make_shared<Texture2D>(std::string("E:/GitHub/JBEngine/resources/wood.png"));
 	boxTexture2D->setTextureFilterMin(TextureFilter::LinearMipmapLinear);
-
+	
 	auto boxMaterial = std::make_shared<PhongLightingMaterial>();
 	boxMaterial->setDiffuse(boxTexture2D);
 	boxMaterial->setSpecular(boxTexture2D);

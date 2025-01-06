@@ -1,4 +1,4 @@
-﻿#include "camera.h"
+#include "camera.h"
 
 namespace JB
 {
@@ -12,7 +12,7 @@ namespace JB
 	Camera::~Camera()
 	{
 	}
-
+	
 	void Camera::updateModelMatrix(bool updateParent, bool updateChildren)
 	{
 		Object3D::updateModelMatrix(updateParent, updateChildren);

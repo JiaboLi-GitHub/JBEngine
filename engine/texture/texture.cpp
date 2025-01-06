@@ -1,4 +1,4 @@
-#include "texture.h"
+﻿#include "texture.h"
 #include "../tools/idAllocator.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -151,6 +151,32 @@ namespace JB
 
 			data.resize(dataSize);
 			memcpy(data.data(), bits, dataSize);
+			stbi_image_free(bits);
+		}
+	}
+
+	void Texture::loadImage(unsigned char* dataIn, std::vector<unsigned char>& data, int widthIn, int heightIn,int& width,int& height)
+	{
+		int nrChannels = 0;
+		uint32_t dataInSize = 0;
+
+		//一个fbx模型有可能打包进来jpg，带有压缩格式的图片情况下，height可能为0，width就代表了整个图片的大小
+		if (!heightIn)
+		{
+			dataInSize = widthIn;
+		}
+		else 
+		{
+			dataInSize = widthIn * heightIn;
+		}
+		auto bits = stbi_load_from_memory(dataIn, dataInSize, &width, &height, &nrChannels, toStbImageFormat(TextureFormat::RGBA));
+
+		if (bits)
+		{
+			dataInSize = width * height * toByteSize(TextureFormat::RGBA);
+
+			data.resize(dataInSize);
+			memcpy(data.data(), bits, dataInSize);
 			stbi_image_free(bits);
 		}
 	}

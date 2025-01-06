@@ -2,6 +2,9 @@
 #include <memory>
 #include <functional>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 #include "../global/constant.h"
 
 namespace JB
@@ -54,8 +57,14 @@ namespace JB
 
 		void rotateAroundAxis(const glm::vec3& axis, float angle);
 
+		void setScale(float x, float y, float z);
+
+		void setQuaternion(float x, float y, float z, float w);
+
 	protected:
 		Object3D();
+
+		void decompose();
 
 	protected:
 		size_t m_id;
@@ -63,6 +72,8 @@ namespace JB
 		std::weak_ptr<Object3D> m_parent;
 		std::vector<Object3D::Ptr> m_children;
 		glm::vec3 m_position;
+		glm::quat m_quaternion = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		glm::vec3 m_scale = glm::vec3(1.0f);
 		glm::mat4x4 m_localMatrix;
 		glm::mat4x4 m_modelMatrix;
 	};

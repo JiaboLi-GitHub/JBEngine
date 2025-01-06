@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <memory>
 #include "camera.h"
 
@@ -13,7 +13,7 @@ namespace JB
 		static PerspectiveCamera::Ptr create(float fov, float aspect, float near, float far);
 
 		~PerspectiveCamera();
-
+	
 		virtual void updateProjectionMatrix() override;
 
 		void setPerspective(float fov, float aspect, float near, float far);

@@ -42,7 +42,7 @@ namespace JB
 	};
 	extern uint32_t toGL(const BufferAllocType& value);
 
-	enum class BufferType
+	enum class BufferType 
 	{
 		ArrayBuffer,
 		IndexBuffer
@@ -67,10 +67,12 @@ namespace JB
 	//属性类型
 	enum class AttributeType : uint8_t
 	{
-		Position,
+		Position = 0,
 		Color,
 		Normal,
-		UV
+		UV,
+		SkinIndex,
+		SkinWeight
 	};
 	extern uint8_t toLocation(AttributeType type);
 
@@ -93,7 +95,9 @@ namespace JB
 		PerspectiveCamera,
 		Mesh,
 		Lights,
-		Group
+		Group,
+		Bone,
+		SkinnedMesh
 	};
 
 	enum class TextureType : uint8_t
@@ -148,7 +152,7 @@ namespace JB
 	};
 	extern uint32_t toGL(TextureCubeTarget target);
 
-	enum class TextureWrapping
+	enum class TextureWrapping 
 	{
 		RepeatWrapping,
 		ClampToEdgeWrapping,
@@ -157,7 +161,7 @@ namespace JB
 	};
 	extern uint32_t toGL(const TextureWrapping& value);
 
-	enum class TextureFilter
+	enum class TextureFilter 
 	{
 		LinearFilter,                  // GL_LINEAR
 		NearestFilter,                 // GL_NEAREST
@@ -171,5 +175,12 @@ namespace JB
 	enum class LightsType : uint8_t
 	{
 		DirectionalLights
+	};
+
+	enum class TrackType : uint8_t
+	{
+		Move,		// 移动
+		Rotate,		// 旋转
+		Scale		// 缩放
 	};
 }

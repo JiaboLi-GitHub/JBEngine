@@ -10,6 +10,7 @@
 #include "driver/driverMaterial.h"
 #include "driver/driverRenderTarget.h"
 #include "driver/driverLightList.h"
+#include "driver/driverInfo.h"
 #include "../objects/renderableObject.h"
 #include "../objects/object3D.h"
 #include "../material/baseMaterial.h"
@@ -79,12 +80,15 @@ namespace JB
 		//着色器资源绑定
 		void shaderResourcesBind(DriverShader::Ptr driverShader, Material::Ptr material, Camera::Ptr camera);
 
+		void shaderResourcesBind_byObject(DriverShader::Ptr driverShader, RenderableObject::Ptr renderableObject);
+
 	private:
 		DriverWindow::Ptr m_driverWindow;
 		DriverRenderList::Ptr m_driverRenderList;
 		DriverState::Ptr m_driverState;
 		DriverRenderTarget::Ptr m_driverRenderTarget;
 		DriverLightList::Ptr m_driverLightList;
+		DriverInfo::Ptr m_driverInfo;
 		int m_width;
 		int m_height;
 	};

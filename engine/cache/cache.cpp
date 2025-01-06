@@ -1,4 +1,4 @@
-﻿#include "cache.h"
+#include "cache.h"
 #include <string>
 
 namespace JB

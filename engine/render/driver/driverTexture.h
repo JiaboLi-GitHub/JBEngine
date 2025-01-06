@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <queue>
 #include "../../texture/texture2D.h"
 #include "../../texture/textureCube.h"

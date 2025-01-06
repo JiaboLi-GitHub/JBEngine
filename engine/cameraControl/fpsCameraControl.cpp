@@ -47,14 +47,14 @@ namespace JB
 
 	void FPSCameraControl::onMouseMove(double xpos, double ypos)
 	{
-		if (!m_rotationState)
+		if (!m_rotationState) 
 			return;
 
 		if (m_mouseStateReset)
 		{
 			m_mouseStateReset = false;
 		}
-		else
+		else 
 		{
 
 			float deltaX = static_cast<float>(xpos - m_mousePosition.x);
@@ -117,25 +117,25 @@ namespace JB
 			needsUpdate = true;
 		}
 
-		if (m_s)
+		if (m_s) 
 		{
 			direction += -front;
 			needsUpdate = true;
 		}
 
-		if (m_a)
+		if (m_a) 
 		{
 			direction += -right;
 			needsUpdate = true;
 		}
 
-		if (m_d)
+		if (m_d) 
 		{
 			direction += right;
 			needsUpdate = true;
 		}
 
-		if (needsUpdate && (direction.x != 0.0 || direction.y != 0.0 || direction.z != 0.0))
+		if (needsUpdate && (direction.x != 0.0 || direction.y != 0.0 || direction.z != 0.0)) 
 		{
 			direction = glm::normalize(direction);
 			position += direction * m_speed;

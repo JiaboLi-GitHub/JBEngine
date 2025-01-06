@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <memory>
 #include "texture.h"
 
@@ -12,6 +12,8 @@ namespace JB
 		Texture2D();
 
 		Texture2D(const std::string& filePath);
+
+		Texture2D(unsigned char* dataIn, int widthIn, int heightIn);
 
 		~Texture2D();
 

@@ -5,8 +5,8 @@
 
 using namespace JB;
 
-uint32_t WIDTH = 800;
-uint32_t HEIGHT = 600;
+uint32_t WIDTH = 1280;
+uint32_t HEIGHT = 720;
 
 int main()
 {

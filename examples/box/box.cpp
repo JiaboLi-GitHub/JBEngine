@@ -10,8 +10,8 @@
 
 using namespace JB;
 
-uint32_t WIDTH = 800;
-uint32_t HEIGHT = 600;
+uint32_t WIDTH = 1280;
+uint32_t HEIGHT = 720;
 
 FPSCameraControl::Ptr fpsCameraControl = nullptr;
 
@@ -20,17 +20,17 @@ static void onFrameSizeCallback(int width, int height)
 	fpsCameraControl->mouseStateReset();
 }
 
-static void onMouseMove(double xpos, double ypos)
+static void onMouseMove(double xpos, double ypos) 
 {
 	fpsCameraControl->onMouseMove(xpos, ypos);
 }
 
-static void onMouseAction(JB::MouseAction action)
+static void onMouseAction(JB::MouseAction action) 
 {
 	fpsCameraControl->onMouseAction(action);
 }
 
-static void onKeyboardAction(KeyBoardState action)
+static void onKeyboardAction(KeyBoardState action) 
 {
 	fpsCameraControl->onKeyboard(action);
 }
@@ -40,7 +40,7 @@ int main()
 	auto boxGeometry = std::make_shared<BoxGeometry>(10.0f, 10.0f, 10.0f);
 
 	auto material = std::make_shared<BaseMaterial>();
-	material->setTexture(std::make_shared<Texture2D>(std::string("E:/SoftWare_ProgRam/JBEngine/resources/wall.jpg")));
+	material->setTexture(std::make_shared<Texture2D>(std::string("E:/GitHub/JBEngine/resources/wall.jpg")));
 
 	auto mesh = Mesh::create(boxGeometry, material);
 	mesh->setPosition(0, 0, -50);
@@ -49,12 +49,12 @@ int main()
 	scene->addChild(mesh);
 
 	std::unordered_map<TextureCubeTarget, std::string> filePathMap = {
-		{TextureCubeTarget::POSITIVE_X,"E:/SoftWare_ProgRam/JBEngine/resources/skybox/right.jpg"},
-		{TextureCubeTarget::NEGATIVE_X,"E:/SoftWare_ProgRam/JBEngine/resources/skybox/left.jpg"},
-		{TextureCubeTarget::POSITIVE_Y,"E:/SoftWare_ProgRam/JBEngine/resources/skybox/top.jpg"},
-		{TextureCubeTarget::NEGATIVE_Y,"E:/SoftWare_ProgRam/JBEngine/resources/skybox/bottom.jpg"},
-		{TextureCubeTarget::POSITIVE_Z,"E:/SoftWare_ProgRam/JBEngine/resources/skybox/front.jpg"},
-		{TextureCubeTarget::NEGATIVE_Z,"E:/SoftWare_ProgRam/JBEngine/resources/skybox/back.jpg"}
+		{TextureCubeTarget::POSITIVE_X,"E:/GitHub/JBEngine/resources/skybox/right.jpg"},
+		{TextureCubeTarget::NEGATIVE_X,"E:/GitHub/JBEngine/resources/skybox/left.jpg"},
+		{TextureCubeTarget::POSITIVE_Y,"E:/GitHub/JBEngine/resources/skybox/top.jpg"},
+		{TextureCubeTarget::NEGATIVE_Y,"E:/GitHub/JBEngine/resources/skybox/bottom.jpg"},
+		{TextureCubeTarget::POSITIVE_Z,"E:/GitHub/JBEngine/resources/skybox/front.jpg"},
+		{TextureCubeTarget::NEGATIVE_Z,"E:/GitHub/JBEngine/resources/skybox/back.jpg"}
 	};
 	auto textureCube = std::make_shared<TextureCube>(filePathMap);
 	scene->setSkyBoxTexture(textureCube);
@@ -77,9 +77,9 @@ int main()
 	int frameCount = 0;
 	float fps = 0.0f;
 
-	while (true)
+	while (true) 
 	{
-		if (!renderer->render(scene, camera))
+		if (!renderer->render(scene, camera)) 
 		{
 			break;
 		}
@@ -92,7 +92,7 @@ int main()
 		auto currentTime = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<float> elapsedTime = currentTime - startTime;
 
-		if (elapsedTime.count() >= 1.0f)
+		if (elapsedTime.count() >= 1.0f) 
 		{
 			fps = frameCount / elapsedTime.count();
 			std::cout << "FPS: " << fps << std::endl;

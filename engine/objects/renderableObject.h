@@ -9,7 +9,7 @@
 namespace JB
 {
 	class Renderer;
-	class RenderableObject : public Object3D
+	class RenderableObject : public Object3D 
 	{
 	public:
 		using Ptr = std::shared_ptr<RenderableObject>;

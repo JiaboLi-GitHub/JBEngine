@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <chrono>
 #include "../../engine/render/render.h"
 #include "../../engine/objects/mesh.h"
@@ -11,8 +11,8 @@
 
 using namespace JB;
 
-uint32_t WIDTH = 200;
-uint32_t HEIGHT = 100;
+uint32_t WIDTH = 1280;
+uint32_t HEIGHT = 720;
 
 FPSCameraControl::Ptr fpsCameraControl = nullptr;
 

@@ -94,6 +94,14 @@ namespace JB
 		}
 	}
 
+	void DriverShader::setMat4Array(const std::string& name, const std::vector<glm::mat4>& value)
+	{
+		for (size_t i = 0; i < value.size(); ++i)
+		{
+			setMat4(name + "[" + std::to_string(i) + "]", value[i]);
+		}
+	}
+
 	void DriverShader::compile()
 	{
 		if (m_handle)

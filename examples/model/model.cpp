@@ -8,8 +8,8 @@
 
 using namespace JB;
 
-constexpr uint32_t WIDTH = 600;
-constexpr uint32_t HEIGHT = 400;
+uint32_t WIDTH = 1280;
+uint32_t HEIGHT = 720;
 
 constexpr int RowMeshSize = 3;
 constexpr int ColumnMeshSize = 3;
@@ -136,7 +136,6 @@ void initScene()
 	planeMaterial->setSpecular(planeTexture2D);
 
 	auto plane = Mesh::create(planeGeometry, planeMaterial);
-
 
 	auto model = AssimpLoader::load("resources/nanosuit/nanosuit.obj");
 

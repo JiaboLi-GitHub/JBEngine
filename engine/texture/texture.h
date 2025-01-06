@@ -59,6 +59,7 @@ namespace JB
 		Texture();
 		
 		static void loadImage(const std::string filePath, std::vector<unsigned char>& data, int& width, int& height);
+		static void loadImage(unsigned char* dataIn, std::vector<unsigned char>& data, int widthIn, int heightIn, int& width, int& height);
 
 	protected:
 		size_t m_id;

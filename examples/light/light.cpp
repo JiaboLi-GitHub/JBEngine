@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <chrono>
 #include "../../engine/render/render.h"
 #include "../../engine/objects/mesh.h"
@@ -11,8 +11,8 @@
 
 using namespace JB;
 
-constexpr uint32_t WIDTH = 200;
-constexpr uint32_t HEIGHT = 200;
+uint32_t WIDTH = 1280;
+uint32_t HEIGHT = 720;
 
 constexpr int RowMeshSize = 3;
 constexpr int ColumnMeshSize = 3;

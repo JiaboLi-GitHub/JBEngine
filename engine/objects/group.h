@@ -13,7 +13,7 @@ namespace JB
 
 		~Group();
 
-	private:
+	protected:
 		Group();
 
 	};

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <glm/glm.hpp>
 #include "../../material/material.h"
 #include "driverGLSL.h"
@@ -35,6 +35,8 @@ namespace JB
 		void setGLSLDirectionalLights(const std::string& name, const GLSL::DirLight& value);
 
 		void setGLSLDirectionalLightsArray(const std::string& name, const std::vector<GLSL::DirLight>& value);
+
+		void setMat4Array(const std::string& name, const std::vector<glm::mat4>& value);
 
 		void compile();
 

@@ -1,4 +1,4 @@
-﻿#include "perspectiveCamera.h"
+#include "perspectiveCamera.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace JB
@@ -34,7 +34,7 @@ namespace JB
 		m_aspect = aspect;
 		m_near = near;
 		m_far = far;
-
+		
 		updateProjectionMatrix();
 	}
 }

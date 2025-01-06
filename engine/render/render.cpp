@@ -9,6 +9,7 @@
 #include "../material/phongLightingMaterial.h"
 #include "../lights/directionalLight.h"
 #include "../tools/errorAnalyzer.h"
+#include "../model/skinnedMesh.h"
 
 namespace JB
 {
@@ -34,6 +35,7 @@ namespace JB
 		m_driverRenderList = std::make_shared<DriverRenderList>();
 		m_driverState = std::make_shared<DriverState>();
 		m_driverLightList = std::make_shared<DriverLightList>();
+		m_driverInfo = std::make_shared<DriverInfo>();
 		m_driverState->setViewport(0, 0, m_width, m_height);
 	}
 
@@ -72,6 +74,9 @@ namespace JB
 		renderScene(m_driverRenderList, scene, camera);
 
 		buildRenderSkyBox(scene, camera);
+
+
+		m_driverInfo->addFrameCount();
 
 		return true;
 	}
@@ -133,7 +138,7 @@ namespace JB
 	void Renderer::buildRenderList(Object3D::Ptr object, Camera::Ptr camera)
 	{
 		//可渲染物体
-		if (object->getType() == Object3DType::RenderableObject || object->getType() == Object3DType::Mesh)
+		if (object->getType() == Object3DType::RenderableObject || object->getType() == Object3DType::Mesh || object->getType() == Object3DType::SkinnedMesh)
 		{
 			auto renderableObject = std::static_pointer_cast<RenderableObject>(object);
 			auto modelViewMatrix = camera->getModelMatrixInverse() * object->getModelMatrix() * glm::vec4(object->getPosition(), 1.0);
@@ -204,13 +209,8 @@ namespace JB
 
 		{
 			//DEBUG
-	/*		if (material->getMaterialType() == MaterialType::BaseMaterial)
-			{
-				auto baseMaterial = std::static_pointer_cast<BaseMaterial>(material);
-				auto driverDirLights = m_driverLightList->getDriverDirLights();
-				auto driverDirLight = driverDirLights.at(0);
-				baseMaterial->setTexture(driverDirLight.light.lock()->getLightShadow()->getRenderTarget()->getColorAttachment());
-			}*/
+			//glEnable(GL_CULL_FACE);
+			//glCullFace(GL_BACK);
 		}
 
 		auto driverShader = DriverShader::getOrAdd(material);
@@ -234,6 +234,8 @@ namespace JB
 
 		//着色器资源绑定
 		shaderResourcesBind(driverShader, material, camera);
+
+		shaderResourcesBind_byObject(driverShader, renderableObject);
 
 		if(geometry->getIndex())
 		{
@@ -318,6 +320,25 @@ namespace JB
 		}
 		default:
 			break;
+		}
+	}
+
+	void Renderer::shaderResourcesBind_byObject(DriverShader::Ptr driverShader, RenderableObject::Ptr renderableObject)
+	{
+		if (renderableObject->getType() == Object3DType::SkinnedMesh)
+		{
+			auto skinnedMesh = std::dynamic_pointer_cast<SkinnedMesh>(renderableObject);
+			
+			auto skeleton = skinnedMesh->getSkeleton();
+			skeleton->update();
+
+			auto boneMatrices = skeleton->getBoneMatrices();
+			driverShader->setMat4Array("finalBonesMatrices", boneMatrices);
+			driverShader->setBool("animationStart", true);
+		}
+		else
+		{
+			driverShader->setBool("animationStart", false);
 		}
 	}
 }

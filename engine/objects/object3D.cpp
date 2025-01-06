@@ -1,5 +1,4 @@
-#include "object3D.h"
-#include <glm/gtc/matrix_transform.hpp>
+﻿#include "object3D.h"
 #include "../tools/idAllocator.h"
 
 namespace JB
@@ -11,6 +10,14 @@ namespace JB
 		m_position = glm::vec3(0.0f);
 		m_localMatrix = glm::mat4(1.0f);
 		m_modelMatrix = glm::mat4(1.0f);
+	}
+
+	void Object3D::decompose()
+	{
+		glm::vec3 skew;
+		glm::vec4 perspective;
+
+		glm::decompose(m_localMatrix, m_scale, m_quaternion, m_position, skew, perspective);
 	}
 
 	Object3D::Ptr Object3D::create()
@@ -69,7 +76,7 @@ namespace JB
 	{
 		auto parent = m_parent.lock();
 		if (parent && updateParent)
-			parent->updateModelMatrix();
+			parent->updateModelMatrix(true, false);
 
 		updateMatrix();
 
@@ -89,6 +96,11 @@ namespace JB
 
 	void Object3D::updateMatrix()
 	{
+		auto translateMatrix = glm::translate(glm::mat4(1.0f), m_position);
+		auto rotateMatrix = glm::mat4_cast(m_quaternion);
+		auto scaleMatrix = glm::scale(glm::mat4(1.0f), m_scale);
+
+		m_localMatrix = translateMatrix * rotateMatrix * scaleMatrix;
 	}
 
 	void Object3D::setPosition(float x, float y, float z)
@@ -98,11 +110,13 @@ namespace JB
 
 	void Object3D::setPosition(const glm::vec3& position)
 	{
+		m_localMatrix[3].x = position.x;
+		m_localMatrix[3].y = position.y;
+		m_localMatrix[3].z = position.z;
+
 		m_position = position;
 
-		m_localMatrix[3][0] = position.x;
-		m_localMatrix[3][1] = position.y;
-		m_localMatrix[3][2] = position.z;
+		decompose();
 	}
 
 	void Object3D::lookAt(const glm::vec3& target, const glm::vec3& up)
@@ -122,6 +136,8 @@ namespace JB
 		m_localMatrix[1] = glm::vec4(nUp, 0.0f);
 		m_localMatrix[2] = glm::vec4(-nTarget, 0.0f);
 		m_localMatrix[3] = glm::vec4(position, 1.0f);
+
+		decompose();
 	}
 
 	void Object3D::setLocalMatrix(const glm::mat4x4& matrix)
@@ -152,5 +168,43 @@ namespace JB
 	void Object3D::rotateAroundAxis(const glm::vec3& axis, float angle)
 	{
 		m_localMatrix = glm::rotate(m_localMatrix, glm::radians(angle), axis);
+
+		decompose();
+	}
+
+	void Object3D::setScale(float x, float y, float z)
+	{
+		//拿到某一列，normalize去掉之前的scale影响,再乘以当前的相关scale
+		auto col0 = glm::normalize(glm::vec3(m_localMatrix[0])) * x;
+		auto col1 = glm::normalize(glm::vec3(m_localMatrix[1])) * y;
+		auto col2 = glm::normalize(glm::vec3(m_localMatrix[2])) * z;
+
+		//将设置好的前三列，重新设置到localmatrix
+		m_localMatrix[0] = glm::vec4(col0, 0.0f);
+		m_localMatrix[1] = glm::vec4(col1, 0.0f);
+		m_localMatrix[2] = glm::vec4(col2, 0.0f);
+
+		decompose();
+	}
+
+	void Object3D::setQuaternion(float x, float y, float z, float w)
+	{
+		//在四元数情况下，glm的初始化，w xyz
+		glm::quat quaternion(w, x, y, z);
+
+		//考虑到，localMatrix可能已经被施加了scale方面的变换
+		float scaleX = glm::length(glm::vec3(m_localMatrix[0]));
+		float scaleY = glm::length(glm::vec3(m_localMatrix[1]));
+		float scaleZ = glm::length(glm::vec3(m_localMatrix[2]));
+
+		//将glm的四元数转换为一个旋转矩阵
+		glm::mat4 rotateMatrix = glm::mat4_cast(quaternion);
+
+		//将scale变换恢复进去
+		m_localMatrix[0] = rotateMatrix[0] * scaleX;
+		m_localMatrix[1] = rotateMatrix[1] * scaleY;
+		m_localMatrix[2] = rotateMatrix[2] * scaleX;
+
+		decompose();
 	}
 }

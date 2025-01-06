@@ -14,6 +14,12 @@ namespace JB
 		Texture2D::loadImage(filePath, m_data, m_width, m_height);
 	}
 
+	Texture2D::Texture2D(unsigned char* dataIn, int widthIn, int heightIn)
+		: Texture2D()
+	{
+		Texture2D::loadImage(dataIn, m_data, widthIn, heightIn, m_width, m_height);
+	}
+
 	Texture2D::~Texture2D()
 	{
 	}

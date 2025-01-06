@@ -23,7 +23,6 @@ void main()
     ourColor = aColor;
     TexCoord = aTexCoord;
 }
-
     )";
     
     std::string MeshBasicMaterialFSCode = 
@@ -44,7 +43,6 @@ void main()
 	FragColor = vec4(ourColor, 1.0f);
 #endif
 }
-
     )";
     
     std::string CubeMaterialVSCode = 
@@ -66,7 +64,6 @@ void main()
     vec4 pos = projection * view * model * vec4(aPos, 1.0);
     gl_Position = pos.xyww;
 }
-
     )";
     
     std::string CubeMaterialFSCode = 
@@ -83,7 +80,6 @@ void main()
 {
     FragColor = texture(skybox, TexCoords);
 }
-
     )";
 
     std::string PhongLightingMaterialVSCode = 
@@ -93,6 +89,8 @@ void main()
 layout(location = 0) in vec3 aPos;
 layout(location = 2) in vec3 aNormal;
 layout(location = 3) in vec2 aTexCoords;
+layout(location = 4) in vec4 boneIds;
+layout(location = 5) in vec4 weights;
 
 out vec3 FragPos;
 out vec3 Normal;
@@ -101,16 +99,48 @@ out vec2 TexCoords;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform bool animationStart;
+
+const int MAX_BONES = 100;
+const int MAX_BONE_INFLUENCE = 4;
+uniform mat4 finalBonesMatrices[MAX_BONES];
 
 void main()
 {
-    FragPos = vec3(model * vec4(aPos, 1.0));
+    vec4 totalPosition = vec4(0.0f);
+
+    if (animationStart)
+    {
+        for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+        {
+            int id = int(boneIds[i]);
+
+            if (id == -1)
+                continue;
+
+            if (id >= MAX_BONES)
+            {
+                totalPosition = vec4(aPos, 1.0f);
+                break;
+            }
+
+            vec4 localPosition = finalBonesMatrices[id] * vec4(aPos, 1.0f);
+            totalPosition += localPosition * weights[i];
+        }
+    }
+    else
+    {
+        totalPosition = vec4(aPos, 1.0f);
+    }
+
+    gl_Position = projection * view * model * totalPosition;
+
+    FragPos = vec3(model * totalPosition);
+
     Normal = mat3(transpose(inverse(model))) * aNormal;
+
     TexCoords = aTexCoords;
-
-    gl_Position = projection * view * vec4(FragPos, 1.0);
 }
-
     )";
     
     std::string PhongLightingMaterialFSCode = 
@@ -213,16 +243,48 @@ float shadowCalculation(sampler2D shadowMap, vec4 fragPosLightSpace, vec3 normal
     R"(
 #version 330 core
 layout(location = 0) in vec3 aPos;
+layout(location = 4) in vec4 boneIds;
+layout(location = 5) in vec4 weights;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform bool animationStart;
+
+const int MAX_BONES = 100;
+const int MAX_BONE_INFLUENCE = 4;
+uniform mat4 finalBonesMatrices[MAX_BONES];
 
 void main()
 {
-    gl_Position = projection * view * model * vec4(aPos, 1.0f);
-}
+    vec4 totalPosition = vec4(0.0f);
 
+    if (animationStart)
+    {
+        for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+        {
+            int id = int(boneIds[i]);
+
+            if (id == -1)
+                continue;
+
+            if (id >= MAX_BONES)
+            {
+                totalPosition = vec4(aPos, 1.0f);
+                break;
+            }
+
+            vec4 localPosition = finalBonesMatrices[id] * vec4(aPos, 1.0f);
+            totalPosition += localPosition * weights[i];
+        }
+    }
+    else
+    {
+        totalPosition = vec4(aPos, 1.0f);
+    }
+
+    gl_Position = projection * view * model * totalPosition;
+}
     )";
     
     std::string DepthMaterialFSCode = 
@@ -230,21 +292,9 @@ void main()
 #version 330 core
 out vec4 FragColor;
 
-
-
- float near_plane = 0.1f;
- float far_plane = 10.f;
-
-float LinearizeDepth(float depth)
-{
-    float z = depth * 2.0 - 1.0; // Back to NDC 
-    return (2.0 * near_plane * far_plane) / (far_plane + near_plane - z * (far_plane - near_plane));
-}
-
 void main()
 {
     FragColor = vec4(vec3(gl_FragCoord.z), 1.0);
 }
-
     )";
 }

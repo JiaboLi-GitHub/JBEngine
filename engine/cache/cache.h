@@ -15,7 +15,7 @@ namespace JB
 	{
 	public:
 		Cache();
-
+		
 		~Cache();
 
 		void add(const size_t& hash, const std::shared_ptr<T>& object);
@@ -30,18 +30,18 @@ namespace JB
 	inline Cache<T>::Cache()
 	{
 	}
-
+	
 	template<typename T>
 	inline Cache<T>::~Cache()
 	{
 	}
-
+	
 	template<typename T>
 	inline void Cache<T>::add(const size_t& hash, const std::shared_ptr<T>& object)
 	{
 		m_cache.emplace(hash, object);
 	}
-
+	
 	template<typename T>
 	inline std::shared_ptr<T> Cache<T>::get(const size_t& hash)
 	{

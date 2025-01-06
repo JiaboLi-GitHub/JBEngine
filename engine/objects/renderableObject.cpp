@@ -1,4 +1,4 @@
-﻿#include "renderableObject.h"
+#include "renderableObject.h"
 
 namespace JB
 {

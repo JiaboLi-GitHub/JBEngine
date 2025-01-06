@@ -1,4 +1,4 @@
-﻿#include "orthographicCamera.h"
+#include "orthographicCamera.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace JB

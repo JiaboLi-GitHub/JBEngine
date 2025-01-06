@@ -1,4 +1,4 @@
-﻿#include "cameraControl.h"
+#include "cameraControl.h"
 
 namespace JB
 {

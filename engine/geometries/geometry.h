@@ -9,7 +9,7 @@ namespace JB
 	{
 	public:
 		using Ptr = std::shared_ptr<Geometry>;
-
+		
 		Geometry();
 
 		~Geometry();
@@ -17,7 +17,7 @@ namespace JB
 		size_t getId();
 
 		AttributeFMap getAttributeFMap();
-
+		
 		void setAttribute(AttributeType type, AttributeF::Ptr attribute);
 		AttributeF::Ptr getAttribute(AttributeType type);
 
