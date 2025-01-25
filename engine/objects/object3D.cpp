@@ -187,6 +187,11 @@ namespace JB
 		decompose();
 	}
 
+	void Object3D::setScale(float scale)
+	{
+		setScale(scale, scale, scale);
+	}
+
 	void Object3D::setQuaternion(float x, float y, float z, float w)
 	{
 		//在四元数情况下，glm的初始化，w xyz

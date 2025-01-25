@@ -59,6 +59,8 @@ namespace JB
 
 		void setScale(float x, float y, float z);
 
+		void setScale(float scale);
+
 		void setQuaternion(float x, float y, float z, float w);
 
 	protected:

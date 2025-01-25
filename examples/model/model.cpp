@@ -138,6 +138,7 @@ void initScene()
 	auto plane = Mesh::create(planeGeometry, planeMaterial);
 
 	auto model = AssimpLoader::load("resources/nanosuit/nanosuit.obj");
+	model->object3D->setScale(0.1);
 
 	auto dirLight = std::make_shared<DirectionalLight>();
 	dirLight->setAmbient(glm::vec3(0.3f, 0.3f, 0.3f));

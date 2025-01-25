@@ -7,7 +7,7 @@ namespace JB
 		m_camera = camera;
 
 		m_renderTarget = std::make_shared<RenderTarget>();
-		m_renderTarget->setSize(1024 * 1, 1024 * 1);
+		m_renderTarget->setSize(1024 * 8, 1024 * 8);
 		m_renderTarget->setUseRbo(false);
 	}
 
