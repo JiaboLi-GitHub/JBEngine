@@ -65,13 +65,13 @@ int main()
 	geometry->setIndex(std::make_shared<AttributeUInt32>(indices, 1));
 
 	auto material2D = std::make_shared<BaseMaterial>();
-	material2D->setTexture(std::make_shared<Texture2D>(std::string("E:/GitHub/JBEngine/resources/wall.jpg")));
+	material2D->setTexture(std::make_shared<Texture2D>(std::string("resources/wall.jpg")));
 
 	auto mesh2D = Mesh::create(geometry, material2D);
 	mesh2D->setPosition(2, 0, -3);
 
 	auto boxGeometry = std::make_shared<BoxGeometry>(10.0f, 10.0f, 10.0f);
-	auto texture2D = std::make_shared<Texture2D>(std::string("E:/GitHub/JBEngine/resources/wall.jpg"));
+	auto texture2D = std::make_shared<Texture2D>(std::string("resources/wall.jpg"));
 
 	auto material = std::make_shared<BaseMaterial>();
 	material->setTexture(texture2D);
@@ -84,12 +84,12 @@ int main()
 	scene->addChild(mesh2D);
 
 	std::unordered_map<TextureCubeTarget, std::string> filePathMap = {
-		{TextureCubeTarget::POSITIVE_X,"E:/GitHub/JBEngine/resources/skybox/right.jpg"},
-		{TextureCubeTarget::NEGATIVE_X,"E:/GitHub/JBEngine/resources/skybox/left.jpg"},
-		{TextureCubeTarget::POSITIVE_Y,"E:/GitHub/JBEngine/resources/skybox/top.jpg"},
-		{TextureCubeTarget::NEGATIVE_Y,"E:/GitHub/JBEngine/resources/skybox/bottom.jpg"},
-		{TextureCubeTarget::POSITIVE_Z,"E:/GitHub/JBEngine/resources/skybox/front.jpg"},
-		{TextureCubeTarget::NEGATIVE_Z,"E:/GitHub/JBEngine/resources/skybox/back.jpg"}
+		{TextureCubeTarget::POSITIVE_X,"resources/skybox/right.jpg"},
+		{TextureCubeTarget::NEGATIVE_X,"resources/skybox/left.jpg"},
+		{TextureCubeTarget::POSITIVE_Y,"resources/skybox/top.jpg"},
+		{TextureCubeTarget::NEGATIVE_Y,"resources/skybox/bottom.jpg"},
+		{TextureCubeTarget::POSITIVE_Z,"resources/skybox/front.jpg"},
+		{TextureCubeTarget::NEGATIVE_Z,"resources/skybox/back.jpg"}
 	};
 	auto textureCube = std::make_shared<TextureCube>(filePathMap);
 	scene->setSkyBoxTexture(textureCube);
@@ -109,10 +109,6 @@ int main()
 	renderer->setClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
 	RenderTarget::Ptr renderTarget = std::make_shared<RenderTarget>();
-
-	auto startTime = std::chrono::high_resolution_clock::now();
-	int frameCount = 0;
-	float fps = 0.0f;
 
 	while (true)
 	{
@@ -136,19 +132,6 @@ int main()
 		renderer->swap();
 
 		fpsCameraControl->update();
-
-		frameCount++;
-
-		auto currentTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> elapsedTime = currentTime - startTime;
-
-		if (elapsedTime.count() >= 1.0f)
-		{
-			fps = frameCount / elapsedTime.count();
-			std::cout << "FPS: " << fps << std::endl;
-			frameCount = 0;
-			startTime = currentTime;
-		}
 	}
 
 	return 0;

@@ -60,8 +60,8 @@ int main()
 		for (int j = 1; j <= ColumnMeshSize; ++j)
 		{
 			auto material = std::make_shared<PhongLightingMaterial>();
-			material->setDiffuse(std::make_shared<Texture2D>(std::string("E:/GitHub/JBEngine/resources/container2.png")));
-			material->setSpecular(std::make_shared<Texture2D>(std::string("E:/GitHub/JBEngine/resources/container2_specular.png")));
+			material->setDiffuse(std::make_shared<Texture2D>(std::string("resources/container2.png")));
+			material->setSpecular(std::make_shared<Texture2D>(std::string("resources/container2_specular.png")));
 			material->setShininess(i * j * 10.0f);
 			auto mesh = Mesh::create(boxGeometry, material);
 			mesh->setPosition(i * 2 - RowMeshSize * 1.25f, j * 2 - ColumnMeshSize * 1.25f, -10);
@@ -92,10 +92,6 @@ int main()
 	renderer->setMouseMoveCallBack(onMouseMove);
 	renderer->setClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-	auto startTime = std::chrono::high_resolution_clock::now();
-	int frameCount = 0;
-	float fps = 0.0f;
-
 	while (true)
 	{
 		if (!renderer->render(scene, camera))
@@ -107,19 +103,6 @@ int main()
 		fpsCameraControl->update();
 
 		rotateCube();
-
-		frameCount++;
-
-		auto currentTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> elapsedTime = currentTime - startTime;
-
-		if (elapsedTime.count() >= 1.0f)
-		{
-			fps = frameCount / elapsedTime.count();
-			std::cout << "FPS: " << fps << std::endl;
-			frameCount = 0;
-			startTime = currentTime;
-		}
 	}
 
 	camera = nullptr;

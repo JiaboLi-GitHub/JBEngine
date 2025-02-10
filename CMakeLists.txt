@@ -6,6 +6,18 @@ set(CMAKE_CXX_STANDARD 17)
 file(GLOB copyResources "./assets" "./thirdParty/libs/assimp/assimp-vc143-mtd.dll")
 file(COPY ${copyResources} DESTINATION ${CMAKE_BINARY_DIR})
 
+set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/resources")
+set(DESTINATION_DIR "${CMAKE_BINARY_DIR}/resources")
+file(MAKE_DIRECTORY ${DESTINATION_DIR})
+file(GLOB_RECURSE RESOURCE_FILES "${RESOURCE_DIR}/*")
+foreach(FILE_PATH ${RESOURCE_FILES})
+    get_filename_component(RELATIVE_PATH ${FILE_PATH} DIRECTORY)
+    string(REPLACE "${RESOURCE_DIR}" "" RELATIVE_DIR ${RELATIVE_PATH})
+    file(MAKE_DIRECTORY "${DESTINATION_DIR}${RELATIVE_DIR}")
+
+    file(COPY ${FILE_PATH} DESTINATION "${DESTINATION_DIR}${RELATIVE_DIR}")
+endforeach()
+
 include_directories(
 SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/include
 )

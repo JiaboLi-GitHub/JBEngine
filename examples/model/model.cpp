@@ -62,10 +62,6 @@ int main()
 	renderer->setMouseMoveCallBack(onMouseMove);
 	renderer->setClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
-	auto startTime = std::chrono::high_resolution_clock::now();
-	int frameCount = 0;
-	float fps = 0.0f;
-
 	while (true)
 	{
 		if (!renderer->render(scene, camera))
@@ -75,19 +71,6 @@ int main()
 		renderer->swap();
 
 		fpsCameraControl->update();
-
-		frameCount++;
-
-		auto currentTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> elapsedTime = currentTime - startTime;
-
-		if (elapsedTime.count() >= 1.0f)
-		{
-			fps = frameCount / elapsedTime.count();
-			std::cout << "FPS: " << fps << std::endl;
-			frameCount = 0;
-			startTime = currentTime;
-		}
 	}
 
 	release();
@@ -138,7 +121,7 @@ void initScene()
 	auto plane = Mesh::create(planeGeometry, planeMaterial);
 
 	auto model = AssimpLoader::load("resources/nanosuit/nanosuit.obj");
-	model->object3D->setScale(0.1);
+	model->object3D->setPosition(0, 0, -50);
 
 	auto dirLight = std::make_shared<DirectionalLight>();
 	dirLight->setAmbient(glm::vec3(0.3f, 0.3f, 0.3f));
@@ -155,8 +138,6 @@ void initScene()
 void initCamera()
 {
 	camera = PerspectiveCamera::create(glm::radians(45.0f), (float)WIDTH / (float)(HEIGHT), 0.1f, 100.0f);
-	camera->setPosition(-1, 0, -1);
-
 	fpsCameraControl = std::make_shared<FPSCameraControl>(camera);
 }
 

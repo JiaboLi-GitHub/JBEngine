@@ -62,10 +62,6 @@ int main()
 	renderer->setMouseMoveCallBack(onMouseMove);
 	renderer->setClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
-	auto startTime = std::chrono::high_resolution_clock::now();
-	int frameCount = 0;
-	float fps = 0.0f;
-
 	while (true)
 	{
 		if (!renderer->render(scene, camera))
@@ -75,19 +71,6 @@ int main()
 		renderer->swap();
 
 		fpsCameraControl->update();
-
-		frameCount++;
-
-		auto currentTime = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> elapsedTime = currentTime - startTime;
-
-		if (elapsedTime.count() >= 1.0f)
-		{
-			fps = frameCount / elapsedTime.count();
-			std::cout << "FPS: " << fps << std::endl;
-			frameCount = 0;
-			startTime = currentTime;
-		}
 	}
 
 	release();
@@ -129,7 +112,7 @@ void initScene()
 	planeGeometry->setAttribute(AttributeType::Normal, std::make_shared<AttributeF>(normals, 3));
 	planeGeometry->setAttribute(AttributeType::UV, std::make_shared<AttributeF>(texCoords, 2));
 	
-	auto planeTexture2D = std::make_shared<Texture2D>(std::string("E:/GitHub/JBEngine/resources/wood.png"));
+	auto planeTexture2D = std::make_shared<Texture2D>(std::string("resources/wood.png"));
 	planeTexture2D->setTextureFilterMin(TextureFilter::LinearMipmapLinear);
 	
 	auto planeMaterial = std::make_shared<PhongLightingMaterial>();
@@ -141,7 +124,7 @@ void initScene()
 	//箱子
 	auto boxGeometry = std::make_shared<BoxGeometry>(1.0f, 1.0f, 1.0f);
 	
-	auto boxTexture2D = std::make_shared<Texture2D>(std::string("E:/GitHub/JBEngine/resources/wood.png"));
+	auto boxTexture2D = std::make_shared<Texture2D>(std::string("resources/wood.png"));
 	boxTexture2D->setTextureFilterMin(TextureFilter::LinearMipmapLinear);
 	
 	auto boxMaterial = std::make_shared<PhongLightingMaterial>();
