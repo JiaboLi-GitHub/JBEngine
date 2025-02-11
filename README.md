@@ -6,11 +6,19 @@
 
 ## 项目展示
 
-<video src="assets/JBEngine window 2025-02-10 20-53-46.mp4"></video>
+
+
+https://github.com/user-attachments/assets/5bf84b35-f965-4463-b0a7-38c0ed87b293
+
+
 
 ![image-20250210204318843](assets/image-20250210204318843.png)
 
-<video src="assets/JBEngine window 2025-02-10 20-56-57.mp4"></video>
+
+
+https://github.com/user-attachments/assets/5eebd0c3-05c4-4696-a6a7-d512a9fd7dc3
+
+
 
 ## 简单示例
 
